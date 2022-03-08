@@ -1,14 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import ThemeToggler from "./ThemeToggler";
 
 export default function Navbar() {
+  const router = useRouter();
   return (
-    <nav className="bg-antiflash px-2 sm:px-4 py-3 dark:bg-smokyblack">
+    <nav
+      className={`${
+        router.pathname === "/"
+          ? "absolute bg-transparent z-10 w-full"
+          : "bg-antiflash shadow-lg dark:bg-smokyblack"
+      } px-2 sm:px-4 py-3`}
+    >
       <div className="container flex flex-wrap justify-between items-center mx-auto">
         <Link href="/">
           <a className="relative flex items-center">
-            <span className="self-center text-3xl font-summer whitespace-nowrap dark:text-white">
+            <span
+              className={`${
+                router.pathname === "/" && "text-white"
+              } self-center text-3xl font-summer whitespace-nowrap dark:text-white`}
+            >
               The Journey
             </span>
             <div className="absolute bottom-4 right-24">
@@ -26,10 +38,14 @@ export default function Navbar() {
             />
           </a>
         </Link>
-        <div className="inline-flex gap-2 items-center">
+        <div className="inline-flex flex-col md:flex-row gap-2 items-center">
           <ThemeToggler />
           <Link href="?a=login" as="/login">
-            <a className="w-20 py-1 border-2 font-product border-bleude hover:bg-bleude focus:bg-sky-700 hover:text-white dark:text-white rounded-[4px] text-center text-xs">
+            <a
+              className={`${
+                router.pathname === "/" && "text-white"
+              } w-20 py-1 border-2 font-product border-bleude hover:bg-bleude focus:bg-sky-700 hover:text-white dark:text-white rounded-[4px] text-center text-xs`}
+            >
               Login
             </a>
           </Link>

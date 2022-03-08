@@ -1,8 +1,10 @@
 import Head from "next/head";
-import Navbar from "./ui/Navbar";
+import { useRouter } from "next/router";
+import { Navbar } from "./ui";
 import { ThemeProvider } from "../context/ThemeContext";
 
 export default function Layout({ children, title }) {
+  const router = useRouter();
   return (
     <>
       <ThemeProvider>
@@ -13,7 +15,9 @@ export default function Layout({ children, title }) {
         </Head>
         <main>
           <Navbar />
-          <div className="container">{children}</div>
+          <div className={router.pathname === "/" ? "" : "container"}>
+            {children}
+          </div>
         </main>
       </ThemeProvider>
     </>

@@ -17,6 +17,7 @@ module.exports = {
     fontFamily: {
       summer: ['"Summer Vibes"', "sans-serif"],
       product: ['"Product Sans"', "sans-serif"],
+      avenir: ['"Avenir"', "sans-serif"],
     },
     container: {
       center: true,
