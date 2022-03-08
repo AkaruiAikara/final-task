@@ -2,8 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function GridJourney() {
-  return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(() => (
-    <a className="bg-white dark:bg-black hover:ring rounded-md shadow-lg">
+  return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+    <a
+      key={i}
+      className="bg-white dark:bg-black hover:ring rounded-md shadow-lg"
+    >
       <Image
         src="https://placeimg.com/600/360/nature"
         width={332}

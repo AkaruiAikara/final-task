@@ -4,9 +4,9 @@ export default function Jumbotron() {
       <img
         src="/img/phuket.png"
         alt="hero"
-        className="absolute top-0 left-0 w-full h-[510px] object-cover brightness-75 dark:brightness-50"
+        className="absolute top-0 left-0 w-full md:w-auto h-[510px] object-cover brightness-75 dark:brightness-50"
       />
-      <div className="absolute top-44 w-full text-center md:text-left md:left-24 text-white font-avenir space-y-4">
+      <div className="absolute top-44 w-full md:w-auto text-center md:text-left md:left-24 text-white font-avenir space-y-4">
         <h1 className="text-4xl md:text-6xl font-bold shadow-sm">
           The Journey
           <br />

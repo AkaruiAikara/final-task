@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Layout from "../components/layout";
 import { Jumbotron, GridJourney } from "../components/ui";
 
@@ -16,7 +15,7 @@ export default function Home() {
             name="search"
             id="search"
             placeholder="Find Journey"
-            className="px-4 py-3 w-full dark:bg-black dark:placeholder:text-gray-400 focus:outline-bleude"
+            className="px-4 py-3 w-full dark:bg-black dark:text-white dark:placeholder:text-gray-400 focus:outline-bleude"
           />
           <button className="p-3 bg-bleude hover:bg-sky-700 active:bg-sky-900 text-white font-product">
             Search

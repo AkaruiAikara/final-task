@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Navbar } from "./ui";
+import { Navbar, AuthModal } from "./ui";
 import { ThemeProvider } from "../context/ThemeContext";
 
 export default function Layout({ children, title }) {
@@ -13,6 +13,7 @@ export default function Layout({ children, title }) {
           <meta name="description" content="The Journey you ever dreamed of" />
           <link rel="icon" href="/img/logo.png" />
         </Head>
+        <AuthModal />
         <main>
           <Navbar />
           <div className={router.pathname === "/" ? "" : "container"}>
