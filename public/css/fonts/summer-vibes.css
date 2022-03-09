@@ -1,0 +1,7 @@
+@font-face {
+  font-family: "Summer Vibes";
+  font-style: italic;
+  font-weight: 400;
+  src: local("Summer Vibes"),
+    url("../../static/fonts/Summer_Vibes_OTF.woff") format("woff");
+}

@@ -1,6 +1,6 @@
-@import url("http://fonts.cdnfonts.com/css/summer-vibes");
-@import url("http://fonts.cdnfonts.com/css/product-sans");
-@import url("http://fonts.cdnfonts.com/css/avenir");
+@import url("/css/fonts/summer-vibes.css");
+@import url("/css/fonts/product-sans.css");
+@import url("/css/fonts/avenir.css");
 
 @tailwind base;
 @tailwind components;
