@@ -32,10 +32,15 @@ export default function Navbar() {
               The Journey
             </span>
             <div className="absolute bottom-4 right-24">
-              <Image width={16} height={16} src="/img/leaf.png" />
+              <Image width={16} height={16} src="/img/leaf.png" alt="leaf" />
             </div>
             <div className="absolute top-5 right-7">
-              <Image width={20} height={20} src="/img/hibiscus.png" />
+              <Image
+                width={20}
+                height={20}
+                src="/img/hibiscus.png"
+                alt="hibiscus"
+              />
             </div>
             <Image
               width={32}
@@ -53,12 +58,14 @@ export default function Navbar() {
               <button
                 ref={excRef}
                 onClick={() => setShowDropDown(!showDropDown)}
-                className="rounded-full hover:ring hover:ring-bleude"
               >
-                <img
+                <Image
                   src="/img/avatar.jpg"
+                  width={50}
+                  height={50}
+                  objectFit="cover"
                   alt="avatar"
-                  className="w-[50px] h-[50px] object-cover rounded-full border-2 border-bleude"
+                  className="rounded-full hover:brightness-75 active:brightness-50"
                 />
               </button>
               <div
@@ -151,19 +158,20 @@ export default function Navbar() {
 // hook that hide dropdown menu when clicked outside of it
 const useOutsideClick = (ref, excRef, callback) => {
   useEffect(() => {
-    const handleClick = (e) => {
-      if (
-        ref.current &&
-        !ref.current.contains(e.target) &&
-        !excRef.current.contains(e.target)
-      ) {
-        callback();
-      }
-    };
+    if (ref.current && excRef.current) {
+      const handleClick = (e) => {
+        if (
+          !ref.current.contains(e.target) &&
+          !excRef.current.contains(e.target)
+        ) {
+          callback();
+        }
+      };
 
-    document.addEventListener("click", handleClick);
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
-  }, [ref, callback]);
+      document.addEventListener("click", handleClick);
+      return () => {
+        document.removeEventListener("click", handleClick);
+      };
+    }
+  }, [ref, callback]); // eslint-disable-line
 };

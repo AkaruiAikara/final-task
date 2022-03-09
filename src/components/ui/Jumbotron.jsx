@@ -1,7 +1,7 @@
 export default function Jumbotron() {
   return (
     <div className="relative h-[510px]">
-      <img
+      <img // eslint-disable-line
         src="/img/phuket.png"
         alt="hero"
         className="absolute top-0 left-0 w-full md:w-auto h-[510px] object-cover brightness-75 dark:brightness-50"

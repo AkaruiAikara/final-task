@@ -11,6 +11,7 @@ export default function GridJourney() {
         src="https://placeimg.com/600/360/nature"
         width={332}
         height={180}
+        alt="journey"
         className="w-full h-[180px] object-cover rounded-t-md"
       />
       <div className="p-4 font-product">

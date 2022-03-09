@@ -30,6 +30,7 @@ export default function AuthModal() {
             width={57}
             height={153}
             src="/img/atlas.png"
+            alt="atlas"
             className="rounded-md"
           />
         </div>
@@ -38,6 +39,7 @@ export default function AuthModal() {
             width={111}
             height={174}
             src="/img/leaf2.png"
+            alt="leaf"
             className="rounded-md"
           />
         </div>

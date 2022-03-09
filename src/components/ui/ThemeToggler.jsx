@@ -8,10 +8,10 @@ export default function ThemeToggler() {
   const toggleRef = useRef(null);
   toggleRef.current?.setSpeed(3);
   useEffect(() => {
-    if (theme === "dark") {
+    if (theme && theme === "dark") {
       toggleRef.current.playSegments([1, 90], true);
     }
-  }, []);
+  }, []); // eslint-disable-line
   // handle theme toggle
   const handleToggle = () => {
     // play lottie animation

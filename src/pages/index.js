@@ -1,4 +1,4 @@
-import Layout from "../components/layout";
+import Layout from "../components/Layout";
 import { Jumbotron, GridJourney } from "../components/ui";
 
 export default function Home() {
