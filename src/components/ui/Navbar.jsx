@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FaUser, FaFeatherAlt, FaRegBookmark } from "react-icons/fa";
+import { FaUser, FaFeatherAlt, FaBookmark } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import ThemeToggler from "./ThemeToggler";
 
@@ -71,8 +71,8 @@ export default function Navbar() {
               <div
                 ref={ref}
                 className={`${
-                  showDropDown ? "absolute right-0" : "hidden"
-                } w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-black dark:divide-gray-600`}
+                  showDropDown ? "absolute right-0 z-10" : "hidden"
+                } w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-lg dark:bg-black dark:divide-gray-600`}
               >
                 <div className="py-3 px-4 text-gray-900 dark:text-white">
                   <span className="block text-sm">John Doe</span>
@@ -85,37 +85,34 @@ export default function Navbar() {
                   aria-labelledby="dropdownInformationButton"
                 >
                   <li>
-                    <a
-                      href="#"
-                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FaUser />
-                        <span>Profile</span>
-                      </div>
-                    </a>
+                    <Link href="/profile">
+                      <a className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                        <div className="flex items-center gap-2">
+                          <FaUser />
+                          <span>Profile</span>
+                        </div>
+                      </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FaFeatherAlt />
-                        <span>New Journey</span>
-                      </div>
-                    </a>
+                    <Link href="/journey">
+                      <a className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                        <div className="flex items-center gap-2">
+                          <FaFeatherAlt />
+                          <span>New Journey</span>
+                        </div>
+                      </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FaRegBookmark />
-                        <span>Bookmarks</span>
-                      </div>
-                    </a>
+                    <Link href="/bookmarks">
+                      <a className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                        <div className="flex items-center gap-2">
+                          <FaBookmark />
+                          <span>Bookmarks</span>
+                        </div>
+                      </a>
+                    </Link>
                   </li>
                 </ul>
                 <div className="py-1">
@@ -160,11 +157,15 @@ const useOutsideClick = (ref, excRef, callback) => {
   useEffect(() => {
     if (ref.current && excRef.current) {
       const handleClick = (e) => {
-        if (
-          !ref.current.contains(e.target) &&
-          !excRef.current.contains(e.target)
-        ) {
-          callback();
+        try {
+          if (
+            !ref.current.contains(e.target) &&
+            !excRef.current.contains(e.target)
+          ) {
+            callback();
+          }
+        } catch (error) {
+          return;
         }
       };
 

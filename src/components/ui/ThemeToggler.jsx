@@ -9,7 +9,7 @@ export default function ThemeToggler() {
   toggleRef.current?.setSpeed(3);
   useEffect(() => {
     if (theme && theme === "dark") {
-      toggleRef.current.playSegments([1, 90], true);
+      toggleRef.current.playSegments([90, 91], true);
     }
   }, []); // eslint-disable-line
   // handle theme toggle
