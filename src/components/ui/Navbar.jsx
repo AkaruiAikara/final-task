@@ -1,10 +1,18 @@
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { FaUser, FaFeatherAlt, FaRegBookmark } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import ThemeToggler from "./ThemeToggler";
 
 export default function Navbar() {
+  const ref = useRef(null);
+  const excRef = useRef(null);
   const router = useRouter();
+  const [showDropDown, setShowDropDown] = useState(false);
+  const isLogin = true;
+  useOutsideClick(ref, excRef, () => setShowDropDown(false));
   return (
     <nav
       className={`${
@@ -40,22 +48,122 @@ export default function Navbar() {
         </Link>
         <div className="inline-flex flex-col md:flex-row gap-2 items-center">
           <ThemeToggler />
-          <Link href="?a=login" as="/login">
-            <a
-              className={`${
-                router.pathname === "/" && "text-white"
-              } w-20 py-1 border-2 font-product border-bleude hover:bg-bleude focus:bg-sky-700 hover:text-white dark:text-white rounded-[4px] text-center text-xs`}
-            >
-              Login
-            </a>
-          </Link>
-          <Link href="?a=register" as="/register">
-            <a className="w-20 py-1 border-2 font-product border-bleude bg-bleude hover:bg-sky-700 focus:bg-sky-900 text-white rounded-[4px] text-center text-xs">
-              Register
-            </a>
-          </Link>
+          {isLogin ? (
+            <div className="relative">
+              <button
+                ref={excRef}
+                onClick={() => setShowDropDown(!showDropDown)}
+                className="rounded-full hover:ring hover:ring-bleude"
+              >
+                <img
+                  src="/img/avatar.jpg"
+                  alt="avatar"
+                  className="w-[50px] h-[50px] object-cover rounded-full border-2 border-bleude"
+                />
+              </button>
+              <div
+                ref={ref}
+                className={`${
+                  showDropDown ? "absolute right-0" : "hidden"
+                } w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-black dark:divide-gray-600`}
+              >
+                <div className="py-3 px-4 text-gray-900 dark:text-white">
+                  <span className="block text-sm">John Doe</span>
+                  <span className="block text-sm font-medium truncat">
+                    johndoe@mail.com
+                  </span>
+                </div>
+                <ul
+                  className="py-1"
+                  aria-labelledby="dropdownInformationButton"
+                >
+                  <li>
+                    <a
+                      href="#"
+                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FaUser />
+                        <span>Profile</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FaFeatherAlt />
+                        <span>New Journey</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FaRegBookmark />
+                        <span>Bookmarks</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                <div className="py-1">
+                  <a
+                    href="#"
+                    className="block py-2 px-4 text-sm text-red-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-red-200 dark:hover:text-white"
+                  >
+                    <div className="flex items-center gap-2">
+                      <FiLogOut />
+                      <span>Logout</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <Link href="?a=login" as="/login">
+                <a
+                  className={`${
+                    router.pathname === "/" && "text-white"
+                  } w-20 py-1 border-2 font-product border-bleude hover:bg-bleude focus:bg-sky-700 hover:text-white dark:text-white rounded-[4px] text-center text-xs`}
+                >
+                  Login
+                </a>
+              </Link>
+              <Link href="?a=register" as="/register">
+                <a className="w-20 py-1 border-2 font-product border-bleude bg-bleude hover:bg-sky-700 focus:bg-sky-900 text-white rounded-[4px] text-center text-xs">
+                  Register
+                </a>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
   );
 }
+
+// hook that hide dropdown menu when clicked outside of it
+const useOutsideClick = (ref, excRef, callback) => {
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (
+        ref.current &&
+        !ref.current.contains(e.target) &&
+        !excRef.current.contains(e.target)
+      ) {
+        callback();
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [ref, callback]);
+};
