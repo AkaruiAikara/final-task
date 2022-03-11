@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { UserContext } from "../../context/UserContext";
 import { FaUser, FaFeatherAlt, FaBookmark } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import ThemeToggler from "./ThemeToggler";
@@ -11,7 +12,13 @@ export default function Navbar() {
   const excRef = useRef(null);
   const router = useRouter();
   const [showDropDown, setShowDropDown] = useState(false);
-  const isLogin = true;
+  const { state, dispatch } = useContext(UserContext);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch({
+      type: "LOGOUT",
+    });
+  };
   useOutsideClick(ref, excRef, () => setShowDropDown(false));
   return (
     <nav
@@ -53,7 +60,7 @@ export default function Navbar() {
         </Link>
         <div className="inline-flex flex-col md:flex-row gap-2 items-center">
           <ThemeToggler />
-          {isLogin ? (
+          {state.isLogin ? (
             <div className="relative">
               <button
                 ref={excRef}
@@ -75,9 +82,9 @@ export default function Navbar() {
                 } w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow-lg dark:bg-black dark:divide-gray-600`}
               >
                 <div className="py-3 px-4 text-gray-900 dark:text-white">
-                  <span className="block text-sm">John Doe</span>
+                  <span className="block text-sm">{state.user.fullName}</span>
                   <span className="block text-sm font-medium truncat">
-                    johndoe@mail.com
+                    {state.user.email}
                   </span>
                 </div>
                 <ul
@@ -117,8 +124,8 @@ export default function Navbar() {
                 </ul>
                 <div className="py-1">
                   <a
-                    href="#"
-                    className="block py-2 px-4 text-sm text-red-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-red-200 dark:hover:text-white"
+                    onClick={() => handleLogout()}
+                    className="cursor-pointer block py-2 px-4 text-sm text-red-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-red-200 dark:hover:text-white"
                   >
                     <div className="flex items-center gap-2">
                       <FiLogOut />

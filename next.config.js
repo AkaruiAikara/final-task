@@ -6,6 +6,7 @@ const nextConfig = {
   },
   env: {
     TINYMCE_API_KEY: process.env.TINYMCE_API_KEY,
+    SERVER_API_URL: process.env.SERVER_API_URL,
   },
 };
 

@@ -1,12 +1,95 @@
+import { useContext, useEffect, useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Lottie from "lottie-react";
+import spinnerData from "../../assets/json/spinner.json";
+import { API, setAuthToken } from "../../utils/api";
+import { UserContext } from "../../context/UserContext";
+import Alert from "./Alert";
 
 Modal.setAppElement("#__next");
 
 export default function AuthModal() {
   const router = useRouter();
+  const { state, dispatch } = useContext(UserContext);
+  const [alert, setAlert] = useState(null);
+  const [loading, setLoading] = useState(false);
+  // store data with useState as form
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    phone: "",
+  });
+  const { fullName, email, password, phone } = form;
+
+  // handle input change
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // handle submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    if (router.query.a === "register") {
+      const body = JSON.stringify({ fullName, email, password, phone });
+      // insert data to API
+      API.post("/register", body, config)
+        .then((res) => {
+          setLoading(false);
+          setAlert({
+            status: "success",
+            message:
+              "You have been registered, You will be redirected to login page",
+          });
+          setTimeout(() => {
+            setAlert(null);
+            router.push("?a=login", "/login");
+          }, 5000);
+        })
+        .catch((err) => {
+          if (err.response) {
+            setLoading(false);
+            setAlert(err.response.data);
+          }
+        });
+    } else if (router.query.a === "login") {
+      const body = JSON.stringify({ email, password });
+      // insert data to API
+      API.post("/login", body, config)
+        .then((res) => {
+          setLoading(false);
+          dispatch({
+            type: "LOGIN",
+            payload: res.data.data,
+          });
+          setAuthToken(res.data.data.token);
+          // Redirect to home page or admin page
+          router.push("/");
+        })
+        .catch((err) => {
+          if (err.response) {
+            setLoading(false);
+            if (err.response.data.details) {
+              setAlert(err.response.data.details[0]);
+            } else {
+              setAlert(err.response.data);
+            }
+          }
+        });
+    }
+  };
   return (
     <Modal
       isOpen={router.query.a && true}
@@ -63,11 +146,12 @@ export default function AuthModal() {
             </svg>
           </button>
         </div>
-        <h2 className="text-3xl dark:text-white font-product font-semibold my-6">
+        <h2 className="text-3xl dark:text-white font-product font-semibold mt-4 mb-2">
           {router.query.a === "login" ? "Login" : "Register"}
         </h2>
-        <form>
-          <div className="space-y-4">
+        <Alert alert={alert} setAlert={setAlert} />
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-2">
             {router.query.a === "register" && (
               <div className="text-left space-y-2">
                 <label
@@ -80,6 +164,8 @@ export default function AuthModal() {
                   type="text"
                   name="fullName"
                   id="fullName"
+                  value={fullName}
+                  onChange={handleChange}
                   className="bg-platinum dark:bg-eerie dark:text-white px-4 py-2 w-full rounded-sm"
                 />
               </div>
@@ -95,6 +181,8 @@ export default function AuthModal() {
                 type="email"
                 name="email"
                 id="email"
+                value={email}
+                onChange={handleChange}
                 className="bg-platinum dark:bg-eerie dark:text-white px-4 py-2 w-full rounded-sm"
               />
             </div>
@@ -109,6 +197,8 @@ export default function AuthModal() {
                 type="password"
                 name="password"
                 id="password"
+                value={password}
+                onChange={handleChange}
                 className="bg-platinum dark:bg-eerie dark:text-white px-4 py-2 w-full rounded-sm"
               />
             </div>
@@ -124,14 +214,34 @@ export default function AuthModal() {
                   type="text"
                   name="phone"
                   id="phone"
+                  value={phone}
+                  onChange={handleChange}
                   className="bg-platinum dark:bg-eerie dark:text-white px-4 py-2 w-full rounded-sm"
                 />
               </div>
             )}
           </div>
-          <button className="w-full bg-bleude hover:bg-sky-700 active:bg-sky-900 py-2 mt-8 text-white font-product font-semibold rounded-sm">
-            {router.query.a === "login" ? "Login" : "Register"}
-          </button>
+          {loading ? (
+            <button
+              type="submit"
+              className="w-full bg-sky-800 py-2 mt-8 text-white font-product rounded-sm"
+              disabled
+            >
+              <Lottie
+                animationData={spinnerData}
+                autoplay
+                loop
+                className="h-6"
+              />
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="w-full bg-bleude hover:bg-sky-700 active:bg-sky-900 py-2 mt-8 text-white font-product rounded-sm"
+            >
+              {router.query.a === "login" ? "Login" : "Register"}
+            </button>
+          )}
         </form>
         {router.query.a === "login" ? (
           <h6 className="text-lg dark:text-white font-avenir my-4">
