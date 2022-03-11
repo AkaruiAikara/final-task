@@ -67,7 +67,11 @@ export default function Navbar() {
                 onClick={() => setShowDropDown(!showDropDown)}
               >
                 <Image
-                  src="/img/avatar.jpg"
+                  src={
+                    state.user.image
+                      ? process.env.SERVER_URL + state.user.image
+                      : "/img/avatar.jpg"
+                  }
                   width={50}
                   height={50}
                   objectFit="cover"

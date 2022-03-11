@@ -26,13 +26,10 @@ const reducer = (state, action) => {
         isLogin: false,
         user: {},
       };
-    case "SET_USER":
+    case "UPDATE_USER":
       return {
         ...state,
-        user: {
-          ...payload,
-          token: state.user.token,
-        },
+        user: payload,
       };
     default:
       throw new Error();
