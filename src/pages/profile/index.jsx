@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import Layout from "../../components/Layout";
 import { API, setAuthToken } from "../../utils/api";
 import { UserContext } from "./../../context/UserContext";
-import { GridJourney } from "../../components/ui";
+import { GridJourney, PostSkeleton } from "../../components/ui";
 import { HiOutlinePencilAlt, HiOutlinePlus } from "react-icons/hi";
 
 export default function Profile() {
@@ -14,6 +14,7 @@ export default function Profile() {
   const [isEdit, setIsEdit] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [journeys, setJourneys] = useState([]);
   const [initialForm, setInitialForm] = useState({
     fullName: "",
     email: "",
@@ -31,6 +32,12 @@ export default function Profile() {
   const getUser = async () => {
     if (state.user.id) {
       const { data } = await API.get(`/users/${state.user.id}`);
+      return data;
+    }
+  };
+  const getJourneys = async () => {
+    if (state.user.id) {
+      const { data } = await API.get(`/journeys/user/${state.user.id}`);
       return data;
     }
   };
@@ -55,7 +62,14 @@ export default function Profile() {
         setPreview(process.env.SERVER_URL + data.image);
       })
       .catch((err) => {
-        return;
+        console.log(err);
+      });
+    getJourneys()
+      .then((data) => {
+        setJourneys(data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
   // handle input change
@@ -260,7 +274,15 @@ export default function Profile() {
         </div>
       </form>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-6">
-        <GridJourney />
+        {journeys.length > 0 ? (
+          journeys.map((journey) => (
+            <GridJourney journey={journey} key={journey.id} />
+          ))
+        ) : (
+          <>
+            <PostSkeleton />
+          </>
+        )}
       </div>
     </Layout>
   );

@@ -76,7 +76,7 @@ export default function AuthModal() {
           });
           setAuthToken(res.data.data.token);
           // Redirect to home page or admin page
-          router.push("/");
+          window.location.href = router.query.redirect || "/";
         })
         .catch((err) => {
           if (err.response) {
@@ -93,7 +93,7 @@ export default function AuthModal() {
   return (
     <Modal
       isOpen={router.query.a && true}
-      onRequestClose={() => router.back()}
+      onRequestClose={() => router.push("/")}
       contentLabel="Auth Modal"
       style={{
         overlay: {
@@ -130,7 +130,7 @@ export default function AuthModal() {
           <button
             type="button"
             className="text-gray-200 bg-emerald-700 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-            onClick={() => router.back()}
+            onClick={() => router.push("/")}
           >
             <svg
               className="w-5 h-5"

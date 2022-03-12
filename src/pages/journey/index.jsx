@@ -1,14 +1,77 @@
-import { useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Editor } from "@tinymce/tinymce-react";
+import { API } from "../../utils/api";
+import { UserContext } from "../../context/UserContext";
+import createDOMPurify from "dompurify";
 import Layout from "../../components/Layout";
 
+const DOMPurify = createDOMPurify(window);
+
 export default function NewJourney() {
+  const { state } = useContext(UserContext);
   const editorRef = useRef(null);
-  const log = (e) => {
+  const imgRef = useRef(null);
+  const [preview, setPreview] = useState(null);
+  const [form, setForm] = useState({
+    title: "",
+    image: "",
+  });
+  // handle input change
+  const handleChange = (e) => {
+    if (e.target.name === "image") {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // handle submit
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
+      if (
+        editorRef.current.getContent().length < 1 ||
+        form.title.length < 1 ||
+        form.image.length < 1
+      ) {
+        alert("Please fill all the fields");
+        return;
+      }
+      const data = new FormData();
+      data.set("userId", state.user.id);
+      data.set("title", form.title);
+      data.set("slug", form.title.replace(/\s+/g, "-").toLowerCase());
+      data.set("image", imgRef.current.files[0], imgRef.current.files[0].name);
+      data.set(
+        "description",
+        DOMPurify.sanitize(editorRef.current.getContent())
+      );
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      API.post("/journeys", data, config)
+        .then((res) => {
+          console.log(res);
+          editorRef.current.setContent("");
+          setForm({
+            title: "",
+            image: "",
+          });
+          setPreview(null);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
   return (
@@ -16,30 +79,16 @@ export default function NewJourney() {
       <h1 className="text-5xl dark:text-white font-avenir font-black my-8">
         New Journey
       </h1>
-      <form onSubmit={log} className="space-y-4 my-6">
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-end">
-          <button
-            type="submit"
-            className="p-2 bg-bleude hover:bg-sky-700 active:bg-sky-900 text-white"
-          >
-            Log editor content
-          </button>
-          <label className="cursor-pointer inline-flex items-center bg-white hover:bg-gray-50 active:bg-gray-100 rounded">
-            <Image
-              src="/img/blank-thumbnail.jpg"
-              width={240}
-              height={160}
-              alt="thumbnail"
-              className="rounded-md"
-            />
-            <input
-              type="file"
-              name="image"
-              id="image"
-              className="md:pl-12 file:hidden"
-            />
-          </label>
-        </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 my-6">
+        <input
+          type="text"
+          name="title"
+          id="title"
+          placeholder="Title"
+          value={form.title}
+          onChange={handleChange}
+          className="px-6 py-2 text-4xl font-product outline-none"
+        />
         <Editor
           id="editor"
           onInit={(evt, editor) => (editorRef.current = editor)}
@@ -47,6 +96,7 @@ export default function NewJourney() {
           init={{
             height: 400,
             menubar: true,
+            branding: false,
             plugins: [
               "advlist autolink lists link image charmap print preview anchor",
               "searchreplace visualblocks code fullscreen",
@@ -61,6 +111,31 @@ export default function NewJourney() {
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px; cursor: text; }",
           }}
         />
+        <label className="cursor-pointer inline-flex items-center bg-white hover:bg-gray-50 active:bg-gray-100 rounded">
+          <Image
+            src={preview ?? "/img/blank-thumbnail.jpg"}
+            width={480}
+            height={320}
+            objectFit="cover"
+            alt="thumbnail"
+            className="rounded-md"
+          />
+          <input
+            ref={imgRef}
+            type="file"
+            name="image"
+            id="image"
+            value={form.image}
+            onChange={handleChange}
+            className="md:pl-12 file:hidden"
+          />
+        </label>
+        <button
+          type="submit"
+          className="px-12 py-2 bg-bleude hover:bg-sky-700 active:bg-sky-900 text-white rounded-sm ml-auto"
+        >
+          Submit
+        </button>
       </form>
     </Layout>
   );

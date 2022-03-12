@@ -1,7 +1,30 @@
+import { useState } from "react";
+import { API } from "../utils/api";
 import Layout from "../components/Layout";
 import { Jumbotron, GridJourney } from "../components/ui";
 
-export default function Home() {
+export default function Home({ data }) {
+  const [journeys, setJourneys] = useState(data);
+  const [inputSearch, setInputSearch] = useState("");
+  // handle search change
+  const handleSearchChange = (e) => {
+    setInputSearch(e.target.value);
+    const search = e.target.value;
+    if (search === "") {
+      setJourneys(data);
+    } else {
+      const filteredJourneys = data.filter((journey) => {
+        return journey.title.toLowerCase().includes(search.toLowerCase());
+      });
+      setJourneys(filteredJourneys);
+    }
+  };
+  // handle search click
+  const handleSearchClick = () => {
+    API.get(`/journeys/search/${inputSearch.toLowerCase()}`).then((res) => {
+      setJourneys(res.data);
+    });
+  };
   return (
     <Layout title="Home">
       <Jumbotron />
@@ -15,16 +38,32 @@ export default function Home() {
             name="search"
             id="search"
             placeholder="Find Journey"
+            value={inputSearch}
+            onChange={handleSearchChange}
             className="px-4 py-3 w-full dark:bg-black dark:text-white dark:placeholder:text-gray-400 focus:outline-bleude"
           />
-          <button className="p-3 bg-bleude hover:bg-sky-700 active:bg-sky-900 text-white font-product">
+          <button
+            onClick={() => handleSearchClick()}
+            className="p-3 bg-bleude hover:bg-sky-700 active:bg-sky-900 text-white font-product"
+          >
             Search
           </button>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-6">
-          <GridJourney />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 py-6">
+          {journeys.map((journey) => (
+            <GridJourney journey={journey} key={journey.id} />
+          ))}
         </div>
       </div>
     </Layout>
   );
+}
+
+export async function getStaticProps() {
+  const res = await API.get("/journeys");
+  return {
+    props: {
+      data: res.data,
+    },
+  };
 }

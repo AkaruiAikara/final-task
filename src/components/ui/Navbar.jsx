@@ -58,7 +58,7 @@ export default function Navbar() {
             />
           </a>
         </Link>
-        <div className="inline-flex flex-col md:flex-row gap-2 items-center">
+        <div className="inline-flex flex-row gap-2 items-center">
           <ThemeToggler />
           {state.isLogin ? (
             <div className="relative">
@@ -141,17 +141,17 @@ export default function Navbar() {
             </div>
           ) : (
             <>
-              <Link href="?a=login" as="/login">
+              <Link href="/?a=login" as="/login">
                 <a
                   className={`${
                     router.pathname === "/" && "text-white"
-                  } w-20 py-1 border-2 font-product border-bleude hover:bg-bleude focus:bg-sky-700 hover:text-white dark:text-white rounded-[4px] text-center text-xs`}
+                  } sm:w-20 py-1 border-2 font-product border-bleude hover:bg-bleude focus:bg-sky-700 hover:text-white dark:text-white rounded-[4px] text-center text-xs`}
                 >
                   Login
                 </a>
               </Link>
-              <Link href="?a=register" as="/register">
-                <a className="w-20 py-1 border-2 font-product border-bleude bg-bleude hover:bg-sky-700 focus:bg-sky-900 text-white rounded-[4px] text-center text-xs">
+              <Link href="/?a=register" as="/register">
+                <a className="sm:w-20 py-1 border-2 font-product border-bleude bg-bleude hover:bg-sky-700 focus:bg-sky-900 text-white rounded-[4px] text-center text-xs">
                   Register
                 </a>
               </Link>
