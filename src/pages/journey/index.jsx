@@ -3,10 +3,8 @@ import Image from "next/image";
 import { Editor } from "@tinymce/tinymce-react";
 import { API } from "../../utils/api";
 import { UserContext } from "../../context/UserContext";
-import createDOMPurify from "dompurify";
+import sanitizeHtml from "sanitize-html";
 import Layout from "../../components/Layout";
-
-const DOMPurify = createDOMPurify(window);
 
 export default function NewJourney() {
   const { state } = useContext(UserContext);
@@ -50,10 +48,7 @@ export default function NewJourney() {
       data.set("title", form.title);
       data.set("slug", form.title.replace(/\s+/g, "-").toLowerCase());
       data.set("image", imgRef.current.files[0], imgRef.current.files[0].name);
-      data.set(
-        "description",
-        DOMPurify.sanitize(editorRef.current.getContent())
-      );
+      data.set("description", sanitizeHtml(editorRef.current.getContent()));
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",

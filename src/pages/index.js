@@ -50,16 +50,17 @@ export default function Home({ data }) {
           </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 py-6">
-          {journeys.map((journey) => (
-            <GridJourney journey={journey} key={journey.id} />
-          ))}
+          {journeys.length > 0 &&
+            journeys.map((journey) => (
+              <GridJourney journey={journey} key={journey.id} />
+            ))}
         </div>
       </div>
     </Layout>
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const res = await API.get("/journeys");
   return {
     props: {
