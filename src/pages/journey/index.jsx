@@ -132,7 +132,7 @@ export default function NewJourney() {
         </label>
         {loading ? (
           <button
-            className="rounded-sm ml-auto bg-sky-800 px-16 py-2 mt-8 text-white font-product ml-auto"
+            className="rounded-sm ml-auto bg-sky-800 px-16 py-2 mt-8 text-white font-product"
             disabled
           >
             <Lottie animationData={spinnerData} autoplay loop className="h-6" />
