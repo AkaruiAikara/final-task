@@ -48,18 +48,26 @@ export default function Profile() {
         setInitialForm({
           fullName: data.fullName,
           email: data.email,
-          image: process.env.SERVER_URL + data.image,
           phone: data.phone,
           address: data.address,
         });
         setForm({
           fullName: data.fullName,
           email: data.email,
-          image: process.env.SERVER_URL + data.image,
           phone: data.phone,
           address: data.address,
         });
-        setPreview(process.env.SERVER_URL + data.image);
+        if (data.image) {
+          setInitialForm({
+            ...initialForm,
+            image: process.env.SERVER_API_URL + data.image,
+          });
+          setForm({
+            ...form,
+            image: process.env.SERVER_API_URL + data.image,
+          });
+          setPreview(process.env.SERVER_API_URL + data.image);
+        }
       })
       .catch((err) => {
         console.log(err);
