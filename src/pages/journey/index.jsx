@@ -1,6 +1,8 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Image from "next/image";
 import { Editor } from "@tinymce/tinymce-react";
+import Lottie from "lottie-react";
+import spinnerData from "../../assets/json/spinner.json";
 import { API } from "../../utils/api";
 import { UserContext } from "../../context/UserContext";
 import sanitizeHtml from "sanitize-html";
@@ -11,6 +13,7 @@ export default function NewJourney() {
   const editorRef = useRef(null);
   const imgRef = useRef(null);
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     title: "",
     image: "",
@@ -43,6 +46,7 @@ export default function NewJourney() {
         alert("Please fill all the fields");
         return;
       }
+      setLoading(true);
       const data = new FormData();
       data.set("userId", state.user.id);
       data.set("title", form.title);
@@ -56,16 +60,17 @@ export default function NewJourney() {
       };
       API.post("/journeys", data, config)
         .then((res) => {
-          console.log(res);
           editorRef.current.setContent("");
           setForm({
             title: "",
             image: "",
           });
           setPreview(null);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
+          setLoading(false);
         });
     }
   };
@@ -125,12 +130,21 @@ export default function NewJourney() {
             className="md:pl-12 file:hidden"
           />
         </label>
-        <button
-          type="submit"
-          className="px-12 py-2 bg-bleude hover:bg-sky-700 active:bg-sky-900 text-white rounded-sm ml-auto"
-        >
-          Submit
-        </button>
+        {loading ? (
+          <button
+            className="rounded-sm ml-auto bg-sky-800 px-16 py-2 mt-8 text-white font-product ml-auto"
+            disabled
+          >
+            <Lottie animationData={spinnerData} autoplay loop className="h-6" />
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="px-12 py-2 bg-bleude hover:bg-sky-700 active:bg-sky-900 text-white rounded-sm ml-auto"
+          >
+            Submit
+          </button>
+        )}
       </form>
     </Layout>
   );
