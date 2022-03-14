@@ -82,7 +82,7 @@ export default function GridJourney({ journey }) {
         <a className="font-product group">
           <div className="p-4">
             <h4 className="text-lg dark:text-white font-semibold group-hover:underline">
-              {journey.title}
+              {truncate(journey.title, 32)}
             </h4>
             <span className="text-gray-400 text-sm py-2 group-hover:underline">
               {new Date(journey.createdAt).toLocaleDateString()}{" "}

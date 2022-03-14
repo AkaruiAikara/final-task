@@ -56,9 +56,9 @@ export default function Journey() {
             }}
             className="rounded-lg"
           />
-          <div className="dark:text-gray-200 text-justify my-12">
+          <article className="prose lg:prose-xl dark:prose-invert max-w-full dark:text-gray-200 my-12">
             <div dangerouslySetInnerHTML={{ __html: journey.description }} />
-          </div>
+          </article>
         </>
       )}
     </Layout>

@@ -48,26 +48,18 @@ export default function Profile() {
         setInitialForm({
           fullName: data.fullName,
           email: data.email,
+          image: data.image ? process.env.SERVER_URL + data.image : null,
           phone: data.phone,
           address: data.address,
         });
         setForm({
           fullName: data.fullName,
           email: data.email,
+          image: data.image ? process.env.SERVER_URL + data.image : null,
           phone: data.phone,
           address: data.address,
         });
-        if (data.image) {
-          setInitialForm({
-            ...initialForm,
-            image: process.env.SERVER_API_URL + data.image,
-          });
-          setForm({
-            ...form,
-            image: process.env.SERVER_API_URL + data.image,
-          });
-          setPreview(process.env.SERVER_API_URL + data.image);
-        }
+        setPreview(data.image ? process.env.SERVER_URL + data.image : null);
       })
       .catch((err) => {
         console.log(err);
@@ -138,7 +130,7 @@ export default function Profile() {
         console.log(err);
       });
   };
-
+  console.log(form);
   return (
     <Layout title="Profile">
       <h1 className="text-5xl dark:text-white font-avenir font-black my-8">
