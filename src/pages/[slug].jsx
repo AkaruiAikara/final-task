@@ -29,7 +29,22 @@ export default function Journey() {
   return (
     <Layout title="Journey">
       {loading ? (
-        <h1>Loading...</h1>
+        <div className="my-8 flex flex-col justify-start gap-8 animate-pulse duration-100">
+          <h1 className="h-12 bg-white dark:bg-black w-full rounded-full"></h1>
+          <div className="h-[1080px] bg-white dark:bg-black rounded-2xl"></div>
+          <div className="flex flex-col justify-start gap-4">
+            <div className="h-4 bg-white dark:bg-black rounded-full"></div>
+            <div className="h-4 bg-white dark:bg-black rounded-full"></div>
+            <div className="h-4 bg-white dark:bg-black rounded-full"></div>
+            <div className="h-4 bg-white dark:bg-black rounded-full"></div>
+            <div className="h-4 bg-white dark:bg-black rounded-full w-1/2"></div>
+            <div className="h-4 bg-white dark:bg-black rounded-full"></div>
+            <div className="h-4 bg-white dark:bg-black rounded-full"></div>
+            <div className="h-4 bg-white dark:bg-black rounded-full"></div>
+            <div className="h-4 bg-white dark:bg-black rounded-full"></div>
+            <div className="h-4 bg-white dark:bg-black rounded-full w-1/2"></div>
+          </div>
+        </div>
       ) : (
         <>
           <div className="flex justify-between items-center">

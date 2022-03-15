@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { Toaster } from "react-hot-toast";
 import { API, setAuthToken } from "../utils/api";
 import { UserContext } from "../context/UserContext";
 import { Navbar, AuthModal } from "./ui";
@@ -48,6 +49,7 @@ export default function Layout({ children, title }) {
         <div className={router.pathname === "/" ? "" : "container"}>
           {children}
         </div>
+        <Toaster />
       </main>
     </>
   );

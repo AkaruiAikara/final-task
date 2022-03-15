@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Lottie from "lottie-react";
+import toast from "react-hot-toast";
 import { API } from "../../utils/api";
 import { BsBookmarkPlus, BsBookmarkPlusFill } from "react-icons/bs";
 import { UserContext } from "../../context/UserContext";
@@ -26,12 +27,14 @@ export default function GridJourney({ journey }) {
     setLoading(true);
     if (!state.isLogin) {
       setLoading(false);
+      toast.error("Please login to bookmark this journey");
       return router.push("?a=login", "/login");
     }
     if (isMarked) {
       await API.delete(`/bookmarks/${state.user.id}/${journey.id}`);
       setIsMarked(false);
       setLoading(false);
+      toast.success("Journey removed from bookmarks");
     } else {
       await API.post("/bookmarks", {
         journeyId: journey.id,
@@ -39,6 +42,7 @@ export default function GridJourney({ journey }) {
       });
       setIsMarked(true);
       setLoading(false);
+      toast.success("Journey added to bookmarks");
     }
   };
   const striped = stripehtml(journey.description);

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Skeleton from "react-loading-skeleton";
+import toast from "react-hot-toast";
 import Layout from "../../components/Layout";
 import { API, setAuthToken } from "../../utils/api";
 import { UserContext } from "./../../context/UserContext";
@@ -125,12 +126,13 @@ export default function Profile() {
         setUser({ ...form });
         setInitialForm({ ...form });
         setIsEdit(false);
+        toast.success("Profile updated successfully");
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Update profile failed");
       });
   };
-  console.log(form);
   return (
     <Layout title="Profile">
       <h1 className="text-5xl dark:text-white font-avenir font-black my-8">

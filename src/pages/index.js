@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Lottie from "lottie-react";
+import noData from "../assets/json/no-data-found.json";
 import { API } from "../utils/api";
 import Layout from "../components/Layout";
 import { Jumbotron, GridJourney } from "../components/ui";
@@ -49,12 +51,20 @@ export default function Home({ data }) {
             Search
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 py-6">
-          {journeys.length > 0 &&
-            journeys.map((journey) => (
+        {journeys.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 py-6">
+            {journeys.map((journey) => (
               <GridJourney journey={journey} key={journey.id} />
             ))}
-        </div>
+          </div>
+        ) : (
+          <div className="flex flex-col justify-center pb-6">
+            <Lottie animationData={noData} loop autoplay className="h-80" />
+            <h1 className="mx-auto text-4xl text-red-700 dark:text-red-300">
+              No data found!
+            </h1>
+          </div>
+        )}
       </div>
     </Layout>
   );

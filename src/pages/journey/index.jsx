@@ -2,6 +2,7 @@ import { useContext, useRef, useState } from "react";
 import Image from "next/image";
 import { Editor } from "@tinymce/tinymce-react";
 import Lottie from "lottie-react";
+import toast from "react-hot-toast";
 import spinnerData from "../../assets/json/spinner.json";
 import { API } from "../../utils/api";
 import { UserContext } from "../../context/UserContext";
@@ -43,7 +44,7 @@ export default function NewJourney() {
         form.title.length < 1 ||
         form.image.length < 1
       ) {
-        alert("Please fill all the fields");
+        toast.error("Please fill all fields");
         return;
       }
       setLoading(true);
@@ -67,10 +68,11 @@ export default function NewJourney() {
           });
           setPreview(null);
           setLoading(false);
+          toast.success("Journey created successfully");
         })
         .catch((err) => {
-          console.log(err);
           setLoading(false);
+          toast.error("Failed create journey, might image size is too large");
         });
     }
   };
