@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { UserContext } from "../../context/UserContext";
 import { FaUser, FaFeatherAlt, FaBookmark } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
-import ThemeToggler from "./ThemeToggler";
 
 export default function Navbar() {
   const ref = useRef(null);
@@ -59,7 +58,6 @@ export default function Navbar() {
           </a>
         </Link>
         <div className="inline-flex flex-row gap-2 items-center">
-          <ThemeToggler />
           {state.isLogin ? (
             <div className="relative">
               <button
